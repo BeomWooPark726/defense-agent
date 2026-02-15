@@ -5,9 +5,14 @@ import google.generativeai as genai
 from datetime import datetime, timedelta
 import time
 
+import os
+
 # --- 설정 사항 ---
-GEMINI_API_KEY = "AIzaSyDXMOjOM6ZQtJpTjifDjgSXR5i-zEz4qhY"
-SLACK_WEBHOOK_URL = "https://hooks.slack.com/services/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"
+# GitHub Secrets에서 값을 가져옵니다.
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
+
+# (기존 코드와 동일하게 수정을 위한 로컬 변수 제거)
 
 RSS_FEEDS = {
     "Breaking Defense": "https://breakingdefense.com/feed/",
