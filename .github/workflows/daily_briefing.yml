@@ -1,0 +1,25 @@
+
+name: Daily Defense Briefing
+on:
+  schedule:
+    - cron: '0 0 * * 1-5' # 월~금 오전 9시 (KST) - UTC 00:00 기준
+  workflow_dispatch: # 수동 실행 버튼 추가
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python_version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install feedparser requests google-generativeai
+
+      - name: Run script
+        run: python defense_briefing.py
