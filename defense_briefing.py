@@ -12,6 +12,11 @@ import os
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
 
+# 필수 환경변수 확인
+if not GEMINI_API_KEY or not SLACK_WEBHOOK_URL:
+    print(f"❌ 설정 오류: {'GEMINI_API_KEY' if not GEMINI_API_KEY else ''} {'SLACK_WEBHOOK_URL' if not SLACK_WEBHOOK_URL else ''} 환경변수를 확인해주세요.")
+    exit(1)
+
 # (기존 코드와 동일하게 수정을 위한 로컬 변수 제거)
 
 RSS_FEEDS = {
@@ -101,8 +106,12 @@ def summarize_with_gemini(news_list):
 {context}
 """
     
-    response = model.generate_content(prompt)
-    return response.text
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        print(f"❌ Gemini API 오류 발생: {e}")
+        return None
 
 def send_to_slack(text):
     payload = {
@@ -119,7 +128,11 @@ if __name__ == "__main__":
     if raw_news:
         print(f"총 {len(raw_news)}개의 뉴스를 요약 중...")
         report = summarize_with_gemini(raw_news)
-        print("리포트 생성 완료. 슬랙으로 전송합니다.")
-        send_to_slack(report)
+        if report:
+            print("리포트 생성 완료. 슬랙으로 전송합니다.")
+            send_to_slack(report)
+        else:
+            print("리포트 생성에 실패했습니다.")
+            exit(1)
     else:
         print("수집된 뉴스가 없습니다.")
