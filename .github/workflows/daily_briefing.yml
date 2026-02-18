@@ -2,7 +2,7 @@
 name: Daily Defense Briefing
 on:
   schedule:
-    - cron: '0 0 * * 1-5' # 월~금 오전 9시 (KST) - UTC 00:00 기준
+    - cron: '42 22 * * 0-4' # 월~금 오전 07:42 (KST) - UTC 22:42 (전날) 기준
   workflow_dispatch: # 수동 실행 버튼 추가
 
 jobs:
